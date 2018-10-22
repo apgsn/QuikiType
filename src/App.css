@@ -1,0 +1,404 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+@import url('https://fonts.googleapis.com/css?family=Mali');
+
+html{
+  height: 100%;
+}
+
+a {
+  color: royalblue;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+body {
+  margin: 0 10% 0 10%;
+  padding: 0;
+  font-family: Inconsolata, 'Courier New', Courier, monospace;
+  background: linear-gradient(to bottom, #445, #88A); 
+  color: white;
+  font-size: 24px;
+}
+
+div, form {
+  outline-style: none;
+  outline-width: 0;
+}
+
+#app-title-1{ 
+  text-align: center;
+  text-shadow: 0px 2px 2px #445, 0px 0px 5px bisque;
+  font-family: Mali, 'Courier New', Courier, monospace;
+  color: bisque;
+  font-size: 76px;
+}
+@keyframes spinTitle {
+  0%{
+    transform: rotate(0deg);    
+  }
+  25%{
+    transform: rotate(3deg);
+  }
+  50%{
+    transform: rotate(-2deg);
+  }
+  75%{
+    transform: rotate(2deg);
+  }
+  100%{
+    transform: rotate(0deg);  
+  }
+}
+
+#app-title-2{ 
+  position: relative;
+  text-align: center;
+  text-shadow: 0px 2px 2px #445, 0px 0px 3px bisque;
+  font-family: Mali, 'Courier New', Courier, monospace;
+  color: bisque;
+  margin-top: -30px;
+  font-size: 36px;
+}
+
+#container{
+  background: #DDD;
+  box-shadow: 10px 10px 10px #445;
+  opacity: .3;
+  --speed: .3s;
+  -webkit-transition: var(--speed);
+  -moz-transition: var(--speed);
+  -ms-transition: var(--speed);
+  -o-transition: var(--speed);
+  transition: var(--speed);
+  border-radius: 10px;
+  border: 0px;
+  padding: 0;
+  width:80%;
+  position: absolute;
+  top: 400px;
+  display: inline-block;
+  word-wrap: break-word;
+  overflow: hidden;
+  height: 250px;
+  --line-height: 50px;
+  line-height: var(--line-height);
+}
+
+#container:after{
+  content:'';
+  z-index: 1;
+  width:100%;
+  height:100%;    
+  position:absolute;
+  top:0;
+  background: linear-gradient(to bottom, #DDD, transparent 30%, transparent 70%, #DDD);
+}
+
+
+#accuracy{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 80%;
+  position:absolute;
+  top: 675px;
+  background: #DDD;
+  box-shadow: 10px 10px 10px #445;
+  color: black;
+  border-radius: 10px;
+}
+
+.accuracy-stat{
+  flex-grow: 1;
+  padding: 20px;
+  white-space: nowrap;
+  width: 26%;
+  margin: auto; 
+}
+
+#loading-image{
+  font-size: 0px;
+  width: 100%;
+  height: 100%;
+  animation: spin 1.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0%{
+    transform: rotate(30deg);
+  }
+  50%{
+    transform: rotate(-10deg);
+  }
+  100%{
+    transform: rotate(30deg);
+  }
+}
+
+#play-button{
+  --speed: .3s;
+  -webkit-transition: var(--speed);
+  -moz-transition: var(--speed);
+  -ms-transition: var(--speed);
+  -o-transition: var(--speed);
+  transition: var(--speed);
+  z-index: 2;
+  position: absolute;
+  opacity: 1;
+  top: 420px;
+  text-align: center;
+  width: 80%;
+  height: 200px;
+  pointer-events: none;
+}
+
+#title{
+  --speed: .3s;
+  -webkit-transition: var(--speed);
+  -moz-transition: var(--speed);
+  -ms-transition: var(--speed);
+  -o-transition: var(--speed);
+  transition: var(--speed);
+  border: 0px;
+  border-radius: 10px;
+  color: black;
+  font-size: 50px;
+  font-family: Inconsolata, 'Courier New', Courier, monospace;
+  position: absolute;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 80%;
+  margin: 0 10% 0 10%;
+}
+
+#target{
+  --speed: .3s;
+  -webkit-transition: var(--speed);
+  -moz-transition: var(--speed);
+  -ms-transition: var(--speed);
+  -o-transition: var(--speed);
+  transition: var(--speed);
+  border: 0px;
+  padding: 0px;
+  margin: 0 10% 0 10%;
+  position: absolute;
+  font-family: Inconsolata, 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  line-height: 50px;
+  font-size: 35px;
+  color: black;
+}
+
+.error{
+  color: crimson !important;
+  border-bottom: none;
+}
+
+.correct{
+  color: green;
+  border-bottom: none;
+}
+
+.cursor{
+  display: inline;
+  border-bottom: 4px solid black;
+  animation: blinky 1s steps(2) infinite;
+}
+
+@keyframes blinky {
+  to{
+    border-bottom: hidden;
+  }
+}
+
+#top-bar{
+  width: 80%;
+  outline-width: 0;
+  position: absolute;
+  top: 320px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+#search-form{
+  order: 1;
+  position: relative;
+  line-height: 75px;
+  text-align: center;
+}
+#wiki-globe{
+  width: 70px;
+  height: 70px;
+  flex: 0 0 70px;
+  margin-left: 20px;
+  order: 2;
+  --speed: .2s;
+  -webkit-transition: var(--speed);
+  -moz-transition: var(--speed);
+  -ms-transition: var(--speed);
+  -o-transition: var(--speed);
+  transition: var(--speed);
+}
+
+@media all and (min-width: 1500px) {
+  #wiki-globe {
+    width: 0%;
+  }
+}
+
+#search-field{
+  border-radius: 3px;
+  font-size: 20px;
+  margin-left: 10px;
+  padding: 5px;
+  --speed: .3s;
+  -webkit-transition: var(--speed);
+  -moz-transition: var(--speed);
+  -ms-transition: var(--speed);
+  -o-transition: var(--speed);
+  transition: var(--speed);
+  width: 200px;
+  visibility: visible;
+  height: 30px;
+  border: 0px;
+  font-family: Inconsolata, 'Courier New', Courier, monospace;
+  background: #EEE;
+  box-shadow: 5px 5px 5px #445;
+  animation: none;
+}
+
+@keyframes alarming{
+  0%{
+    background: #EEE;
+  }
+  50%{
+    background: palevioletred;
+  }
+  100%{
+    background: #EEE;
+  }
+}
+
+#magnifying-glass{
+  order: 0;
+}
+
+#topbar-left-options{
+  width:80%;
+  order: 3;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+#icon-refresh{
+  justify-content: flex-end;
+  order: 1;
+}
+
+#icon-settings{
+  justify-content: flex-end;
+  order: 2;
+}
+
+.icon{
+  position: relative;
+  text-align: center;
+  top: 10px;
+  padding: 10px;
+  width: 30px;
+  height: 30px;
+  opacity: .9;  
+}
+
+
+#settings-panel{
+  z-index:2;
+  --speed: .2s;
+  -webkit-transition: var(--speed);
+  -moz-transition: var(--speed);
+  -ms-transition: var(--speed);
+  -o-transition: var(--speed);
+  transition: var(--speed);
+  font-family: Mali, 'Courier New', Courier, monospace;
+  border-radius: 10px;
+  border: 0px;
+  margin-top: 0px;
+  width: 70%;
+  position: absolute;
+  top: 400px;
+  display: inline-block;
+  word-wrap: break-word;
+  overflow: hidden;
+  height: 0px;
+  font-size: 20px;
+  background: bisque;
+  color:black;
+  padding: 0 5% 0 5%;
+}
+
+
+#settings-panel > div{
+  top: 25px;
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#wiki-link{
+  margin-top: 30px;
+}
+
+/* Hide the browser's default checkbox */
+.option-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  cursor: pointer;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #88A;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.option-checkbox input:checked ~ .checkmark {
+  background-color: #445;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  font-size: 25px;
+  left: 5px;
+  top: -6px;
+  color:white;
+  content: "\2713";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.option-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
