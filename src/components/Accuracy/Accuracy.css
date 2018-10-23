@@ -1,0 +1,20 @@
+#accuracy{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 80%;
+    position:absolute;
+    top: 675px;
+    background: #EEE;
+    box-shadow: 10px 10px 10px #445;
+    color: black;
+    border-radius: 10px;
+  }
+  
+  .accuracy-stat{
+    flex-grow: 1;
+    padding: 20px;
+    white-space: nowrap;
+    width: 26%;
+    margin: auto; 
+  }

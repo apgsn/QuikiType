@@ -1,0 +1,86 @@
+#settings-panel{
+    z-index:2;
+    --speed: .2s;
+    -webkit-transition: var(--speed);
+    -moz-transition: var(--speed);
+    -ms-transition: var(--speed);
+    -o-transition: var(--speed);
+    transition: var(--speed);
+    font-family: Mali, 'Courier New', Courier, monospace;
+    border-radius: 10px;
+    border: 0px;
+    margin-top: 0px;
+    width: 70%;
+    position: absolute;
+    top: 400px;
+    display: inline-block;
+    word-wrap: break-word;
+    overflow: hidden;
+    height: 0px;
+    font-size: 20px;
+    background: bisque;
+    color:black;
+    padding: 0 5% 0 5%;
+  }
+  
+  #settings-panel > div{
+    top: 25px;
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  #wiki-link{
+    margin-top: 30px;
+  }
+  
+  /* Checkbox styling (courtesy of w3schools) */
+  
+  /* Hide the browser's default checkbox */
+  .option-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+    cursor: pointer;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #88A;
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .option-checkbox input:checked ~ .checkmark {
+    background-color: #445;
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    font-size: 25px;
+    left: 5px;
+    top: -6px;
+    color:#EEE;
+    content: "\2713";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark when checked */
+  .option-checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  

@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
+
 import removeDiacritics from './diacritics.js';
+import onSearchSubmit from './handleApi.js';
+
+import AppTitle from "./components/AppTitle/AppTitle";
+import TopBar from "./components/TopBar/TopBar";
+import Play from "./components/Play/Play";
+import MainContainer from "./components/MainContainer/MainContainer"
+import Accuracy from "./components/Accuracy/Accuracy";
 
 const WIKI_ENDPOINT = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*";
 const WIKI_PREFIXSEARCH_QUERY = "&list=search&srlimit=200&srnamespace=0&srsearch=";
@@ -8,92 +16,6 @@ const WIKI_CONTENT_QUERY = "&prop=extracts&list=&exlimit=max&exintro=1&explainte
   "&exsectionformat=plain&exsentences=3&pageids="; // for testing: exchars=50
 const LENGTH_FILTER = 30;
 let containerOffset = 0;  // top margin between container and target, to be calculated once components are rendered 
-
-
-const AppTitle = () => 
-  <React.Fragment>
-    <h1 id="app-title-1">QuikiType!</h1>
-    <h3 id="app-title-2">quick Wikipedia snippets for typists</h3>
-  </React.Fragment>
-
-const Play = () => 
-  <div id="play-button">
-    <img src="imgs/play-btn.png" alt="play" id="play-btn" />
-  </div>
-
-const Settings = (props) =>
-  <div id="settings-panel" tabIndex="1" >{
-    props.settingsOptions.map(key => 
-      <div id={key.name}>
-        <label htmlFor={"label-" + key.name} key={"label-" + key.name} 
-          className="option-checkbox" onBlur={props.toggleSettings}>
-          <input id={"input-" + key.name} type="checkbox" name={"input-" + key.name}
-            defaultChecked={key.val} onChange={props.onCheckboxChange} />{key.label}
-          <span className="checkmark" />
-          <br />
-        </label>
-      </div>
-      )}
-    <div id="wiki-link">Read it on Wikipedia:&nbsp;
-      <a href={"https://en.wikipedia.org/wiki/" + props.title} alt={props.title}
-        target="_blank" onBlur={props.toggleSettings} >{props.title}</a>
-    </div>
-  </div>
-
-const MainContainer = (props) => {
-  const {toggleSettings, settingsOptions, onCheckboxChange, title, fetching,
-    cursorPos, target, tempTypingErr} = props;
-  return(
-    <React.Fragment>
-      <Settings toggleSettings={toggleSettings} settingsOptions={settingsOptions}
-        onCheckboxChange={onCheckboxChange} title={title} />
-      <div id="container" tabIndex="0">
-        <div id="title">{fetching ? " " : title}</div>
-        <div id="target">
-          {fetching ? "Fetching..." : target.split('').map((i, index) => 
-            <span id={"ch-" + index} className={"char "
-              + (index < cursorPos ? "correct " : "")
-              + (tempTypingErr.indexOf(index) !== -1 ? "error " : "")
-              + (index === cursorPos ? "cursor " : "")
-            }>{i}</span>
-        )}</div>
-      </div>
-    </React.Fragment>
-  );
-}
-
-const Accuracy = ({keyStrokes, totalTypingErr, timer, wpm}) => 
-  keyStrokes.length > 0 && (
-  <div id="accuracy">
-    <div id="errors" className="accuracy-stat">Errors:&nbsp;
-      {(totalTypingErr.length*100/keyStrokes.length).toFixed(2)}%
-    </div>
-    <div id="time" className="accuracy-stat">Clock:&nbsp;{
-      Math.floor(timer/60) + ":" + (timer%60 < 10 ? "0" : "") + timer%60
-      }</div>
-    <div id="wpm" className="accuracy-stat">WPM:&nbsp;{wpm}</div>
-  </div>)
-
-const TopBar = ({onSearchSubmit, pickNextArticle, toggleSettings}) => 
-  <div id="top-bar">
-    <div id="magnifying-glass">
-      <img src="imgs/icon-magnifying.png" alt="Search" id="icon-magnifying" className="icon" />
-    </div>
-    <form id="search-form" onSubmit={onSearchSubmit} tabIndex="1">
-      <input id="search-field" type="text"/>
-    </form>
-    <div id="wiki-globe">
-      <img src="imgs/wikilogo.png" alt="Loading..." id="loading-image" />
-    </div>
-    <div id="topbar-left-options">
-      <div id="refresh" tabIndex="2" onClick={pickNextArticle}>
-        <img src="imgs/icon-refresh.png" alt="Pick another article" id="icon-refresh" className="icon" />
-      </div>
-      <div id="settings" tabIndex="3" onClick={toggleSettings}>
-        <img src="imgs/icon-settings.png" alt="Settings" id="icon-settings" className="icon" />
-      </div>
-    </div>
-  </div>
 
 class App extends Component {
   constructor(props){
@@ -183,7 +105,7 @@ class App extends Component {
     e.preventDefault();
     this.refreshContainer();
     this.setState({searchTerm : document.getElementById("search-field").value}, this.fetchArticlesIds);
-  }
+  };
 
   // update options by creating a new settingsOptions list to be stored in state
   onCheckboxChange = (e) => {
@@ -453,7 +375,7 @@ class App extends Component {
     return (
       <div className="App">
         <AppTitle />
-        <TopBar onSearchSubmit={this.onSearchSubmit} pickNextArticle={this.pickNextArticle} 
+        <TopBar onSearchSubmit={onSearchSubmit} pickNextArticle={this.pickNextArticle} 
           toggleSettings={this.changeSettingsStatus}/>
         <Play />
         <MainContainer target={target} title={title} tempTypingErr={tempTypingErr} 

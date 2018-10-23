@@ -1,0 +1,125 @@
+#top-bar{
+    width: 80%;
+    outline-width: 0;
+    position: absolute;
+    top: 320px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+  }
+  
+  #wiki-globe{
+    width: 70px;
+    height: 70px;
+    flex: 0 0 70px;
+    margin-left: 20px;
+    order: 2;
+    --speed: .2s;
+    -webkit-transition: var(--speed);
+    -moz-transition: var(--speed);
+    -ms-transition: var(--speed);
+    -o-transition: var(--speed);
+    transition: var(--speed);
+  }
+  
+  @media all and (min-width: 1500px) {
+    #wiki-globe {
+      width: 0%;
+    }
+  }
+  
+  #loading-image{
+    font-size: 0px;
+    width: 100%;
+    height: 100%;
+    animation: spinWikiLogo 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes spinWikiLogo {
+    0%{
+      transform: rotate(30deg);
+    }
+    50%{
+      transform: rotate(-10deg);
+    }
+    100%{
+      transform: rotate(30deg);
+    }
+  }
+  
+  #search-form{
+    order: 1;
+    position: relative;
+    line-height: 75px;
+    text-align: center;
+  }
+  
+  #search-field{
+    border-radius: 3px;
+    font-size: 20px;
+    margin-left: 10px;
+    padding: 5px;
+    --speed: .3s;
+    -webkit-transition: var(--speed);
+    -moz-transition: var(--speed);
+    -ms-transition: var(--speed);
+    -o-transition: var(--speed);
+    transition: var(--speed);
+    width: 200px;
+    visibility: visible;
+    height: 30px;
+    border: 0px;
+    font-family: Inconsolata, 'Courier New', Courier, monospace;
+    background: #EEE;
+    box-shadow: 5px 5px 5px #445;
+    animation: none;
+  }
+  
+  @keyframes alarming{
+    0%{
+      background: #EEE;
+    }
+    50%{
+      background: palevioletred;
+    }
+    100%{
+      background: #EEE;
+    }
+  }
+  
+  #magnifying-glass{
+    order: 0;
+  }
+  
+  #topbar-left-options{
+    width:80%;
+    order: 3;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+  }
+  
+  #icon-refresh{
+    justify-content: flex-end;
+    order: 1;
+  }
+  
+  #icon-settings{
+    justify-content: flex-end;
+    order: 2;
+  }
+  
+  .icon{
+    position: relative;
+    text-align: center;
+    top: 10px;
+    padding: 10px;
+    width: 30px;
+    height: 30px;
+    opacity: .9;  
+  }
+  
