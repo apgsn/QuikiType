@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import './App.css';
 
 import removeDiacritics from './diacritics.js';
-import onSearchSubmit from './handleApi.js';
-
-import AppTitle from "./components/AppTitle/AppTitle";
-import TopBar from "./components/TopBar/TopBar";
-import Play from "./components/Play/Play";
-import MainContainer from "./components/MainContainer/MainContainer"
-import Accuracy from "./components/Accuracy/Accuracy";
+import AppTitle from "./components/AppTitle";
+import TopBar from "./components/TopBar";
+import Play from "./components/Play";
+import MainContainer from "./components/MainContainer"
+import Accuracy from "./components/Accuracy";
 
 const WIKI_ENDPOINT = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*";
 const WIKI_PREFIXSEARCH_QUERY = "&list=search&srlimit=200&srnamespace=0&srsearch=";
@@ -56,8 +54,8 @@ class App extends Component {
   }
 
   componentDidMount() {  
-    document.getElementById("target").style.top = "100px";
-    document.getElementById("title").style.top = "40px";
+    document.getElementById("target").style.top = "100px"; // set here to allow easier newline calculation
+    document.getElementById("title").style.top = "40px"; // set here to allow easier newline calculation
     document.getElementById("container").addEventListener("keydown", this.onKeyPress);
     document.getElementById("container").addEventListener("focus", this.changeFocus);
     document.getElementById("container").addEventListener("blur", this.changeFocus);
@@ -99,7 +97,7 @@ class App extends Component {
       this.calcWPM();
     }, S);
   }
-  
+
   // when the user presses enter in search field, begin fetching articles
   onSearchSubmit = (e) => {
     e.preventDefault();
@@ -171,7 +169,7 @@ class App extends Component {
 
   // set the new status of targetOnFocus & manage graphical changes 
   changeFocus = () => {
-    if(this.state.targetOnFocus){ // window is blurring
+    if(this.state.targetOnFocus){  // window is blurring
       document.getElementById("container").style.opacity = .3;
       document.getElementById("play-button").style.opacity = 1;
       if(document.getElementsByClassName("cursor").length){
@@ -342,7 +340,6 @@ class App extends Component {
     // prevent quick-search in Firefox
     if(e.key === "'" || e.key === "/" || e.key === " ") e.preventDefault(); 
     // if it's a single char (as opposed to special keys), check:
-
     if(e.key.length === 1){
       this.setState({keyStrokes : keyStrokes + e.key});
       let match = e.key === target[cursorPos] || 
@@ -373,16 +370,16 @@ class App extends Component {
     const {target, keyStrokes, cursorPos, tempTypingErr, totalTypingErr, 
       timer, wpm, settingsOptions, fetching, title} = this.state;
     return (
-      <div className="App">
+      <React.Fragment>
         <AppTitle />
-        <TopBar onSearchSubmit={onSearchSubmit} pickNextArticle={this.pickNextArticle} 
+        <TopBar pickNextArticle={this.pickNextArticle} onSearchSubmit={this.onSearchSubmit}
           toggleSettings={this.changeSettingsStatus}/>
         <Play />
         <MainContainer target={target} title={title} tempTypingErr={tempTypingErr} 
         cursorPos={cursorPos} fetching={fetching} toggleSettings={this.checkAsyncFocus}
         settingsOptions={settingsOptions} onCheckboxChange={this.onCheckboxChange} />
         <Accuracy keyStrokes={keyStrokes} totalTypingErr={totalTypingErr} timer={timer} wpm={wpm} />
-      </div>
+      </React.Fragment>
     );
   }
 }

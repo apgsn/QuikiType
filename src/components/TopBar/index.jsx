@@ -1,5 +1,6 @@
 import React from 'react';
 import './TopBar.css';
+//import onSearchSubmit from './handleApi.js';
 
 const TopBar = ({onSearchSubmit, pickNextArticle, toggleSettings}) => 
   <div id="top-bar">
