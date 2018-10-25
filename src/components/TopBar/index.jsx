@@ -1,7 +1,7 @@
 import React from 'react';
 import './TopBar.css';
 
-const TopBar = ({onSearchSubmit, pickNextArticle, toggleSettings, onSearchChange, firstSearch, searchTerm}) => 
+const TopBar = ({onSearchSubmit, pickNextArticle, toggleSettings, onSearchChange, firstSearch, searchTerm, fetching}) => 
   <div id="top-bar">
     <div id="magnifying-glass">
       <img src="imgs/icon-magnifying.png" alt="Search" id="icon-magnifying" className="icon" />
@@ -9,7 +9,7 @@ const TopBar = ({onSearchSubmit, pickNextArticle, toggleSettings, onSearchChange
     <form id="search-form" onSubmit={onSearchSubmit} tabIndex="1">
       <input id="search-field" type="text" onChange={onSearchChange} value={firstSearch ? "" : searchTerm} />
     </form>
-    <div id="wiki-globe">
+    <div id="wiki-globe" className={fetching ? "wiki-globe-scale" : ""}>
       <img src="imgs/wikilogo.png" alt="Loading..." id="loading-image" />
     </div>
     <div id="topbar-left-options">

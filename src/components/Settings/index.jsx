@@ -2,12 +2,12 @@ import React from 'react';
 import './Settings.css';
 
 const Settings = (props) =>
-  <div id="settings-panel" tabIndex="1" >{
+  <div id="settings-panel" tabIndex="1" className={props.showSettings ? "visible" : ""}>{
     props.settingsOptions.map((key, index) => 
       <div id={"option-" + index + "-" + key.name} key={"div-opt-" + index}>
-        <label htmlFor={"label-" + key.name} key={"label-opt-" + index} 
+        <label htmlFor={key.name} key={"label-opt-" + index} 
           className="option-checkbox" onBlur={props.toggleSettings}>
-          <input id={"input-" + key.name} type="checkbox" name={"input-" + key.name} key={"input-opt-" + index}
+          <input id={key.name} type="checkbox" name={key.name} key={"input-opt-" + index}
             defaultChecked={key.val} onChange={props.onCheckboxChange} />{key.label}
           <span className="checkmark" key={"span-opt-" + index} />
           <br />

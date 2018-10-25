@@ -22,8 +22,13 @@
     -ms-transition: var(--speed);
     -o-transition: var(--speed);
     transition: var(--speed);
+    transform: scale(0);
   }
   
+  .wiki-globe-scale{
+    transform: scale(1) !important;
+  }
+
   @media all and (min-width: 1500px) {
     #wiki-globe {
       width: 0%;

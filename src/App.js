@@ -39,8 +39,11 @@ class App extends Component {
       isCursorRendered: false,
       readyToRollAgain : true,
       timer : 0,
-      wpm: 0, // words per minute
       showSettings: false,
+      styles: {
+        title : 40,
+        target : 100
+      },
       settingsOptions : [{
           name: "ignoreCase",
           label : "Ignore letter case",
@@ -54,9 +57,7 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {  
-    document.getElementById("target").style.top = "100px"; // set here to allow easier newline calculation
-    document.getElementById("title").style.top = "40px"; // set here to allow easier newline calculation
+  componentDidMount() {
     document.getElementById("container").addEventListener("keydown", this.onKeyPress);
     document.getElementById("container").addEventListener("focus", this.changeFocus);
     document.getElementById("container").addEventListener("blur", this.changeFocus);
@@ -69,8 +70,8 @@ class App extends Component {
     if(this.state.articleIterator > prevState.articleIterator) {
       this.refreshContainer();
     }
-    if(this.state.showSettings !== prevState.showSettings) {
-      this.changeSettingsView();
+    if(this.state.showSettings !== prevState.showSettings && this.state.showSettings) {
+      document.getElementById("settings-panel").focus();
     }
     if(!this.state.isCursorRendered && document.getElementsByClassName("cursor").length){
       this.setState({isCursorRendered : true});
@@ -95,7 +96,6 @@ class App extends Component {
         this.setState({timer : (now - start) / S});
       }
       else start += S;
-      this.calcWPM();
     }, S);
   }
 
@@ -131,28 +131,15 @@ class App extends Component {
       tempTypingErr : [],
       readyToRollAgain : false
     });
-    document.getElementById("target").style.top = "100px";
-    document.getElementById("title").style.top = "40px";
-    let chars = document.getElementsByClassName("char");
-    for(let i = 0; i < chars.length; i++){
-      chars[i].removeAttribute("style"); 
-    }
+    this.changeScrollCoord();
     this.chooseArticle();
   }
 
-  // set the new status of showSettings. Separated from "settings-panel" graphical changes
-  // because of asynchronicity -- see checkAsyncFocus() and componentDidUpdate()
-  changeSettingsStatus = () => {
-    this.setState({showSettings : !this.state.showSettings});
-  }
-
-  // manage graphical changes of settings panel 
-  changeSettingsView = () => {
-    if(this.state.showSettings){
-      document.getElementById("settings-panel").focus();
-      document.getElementById("settings-panel").style.height = "250px";
-    }
-    else document.getElementById("settings-panel").style.height = 0;
+  changeScrollCoord = (title = 40, target = 100) => {
+    let newStyles = this.state.styles;
+    newStyles.title = title;
+    newStyles.target = target;
+    this.setState({styles : newStyles});
   }
 
   // check if "settings-panel" or any of its children get blurred.
@@ -169,44 +156,21 @@ class App extends Component {
     wait().then(elm => {
       if(!document.getElementById("settings-panel").contains(elm) && 
         elm !== document.getElementById("settings")){
-        this.changeSettingsStatus();
+        this.changeSettings();
       } 
     });
   }
 
-  // set the new status of targetOnFocus & manage graphical changes 
+  changeSettings = () => {
+    this.setState({showSettings : !this.state.showSettings});
+  }
+
   changeFocus = () => {
-    if(this.state.targetOnFocus){  // window is blurring
-      document.getElementById("container").style.opacity = .3;
-      document.getElementById("play-button").style.opacity = 1;
-      if(document.getElementsByClassName("cursor").length){
-        document.getElementsByClassName("cursor")[0].style.borderBottom = "0px";
-      }
-    } else {  // window is getting focus
-      document.getElementById("container").style.opacity = 1;
-      document.getElementById("play-button").style.opacity = 0;
-      if(document.getElementsByClassName("cursor").length){
-        document.getElementsByClassName("cursor")[0].style.borderBottom = "4px solid black";
-      }
-    }
     this.setState({targetOnFocus : !this.state.targetOnFocus});
   }
 
-  // set the new status of fetching & manage graphical changes 
   changeFetching = () => {
-    let f = String(Number(!this.state.fetching));
-    document.getElementById("wiki-globe").style.transform = "scale(" + f + ")";
     this.setState({fetching : !this.state.fetching});
-  }
-
-  checkCase = (key, target) => {  // TODO: merge in universal foo to handle settingsOptions
-    let isTicked = this.state.settingsOptions.filter(i => i.name === "ignoreCase")[0].val;
-    return isTicked && key.toLowerCase() === target.toLowerCase();
-  }
-
-  checkSpecial = (key, target) => {
-    let isTicked = this.state.settingsOptions.filter(i => i.name === "ignoreSpecial")[0].val;
-    return isTicked && (key === removeDiacritics(target) || (key === " " && /[^\w]/.test(target)));    
   }
 
   animateCSS = (id, animation, timer) => {
@@ -312,12 +276,16 @@ class App extends Component {
     }
   }
 
-  calcWPM = () => {
-    const STANDARD_WORD_LENGTH = 5;
-    const {correctyTypedChars, timer} = this.state;
-    this.setState({wpm : Math.round((correctyTypedChars / STANDARD_WORD_LENGTH) * (60 / timer))});
+  checkCase = (key, target) => {  // TODO: merge in universal foo to handle settingsOptions
+    let isTicked = this.state.settingsOptions.filter(i => i.name === "ignoreCase")[0].val;
+    return isTicked && key.toLowerCase() === target.toLowerCase();
   }
 
+  checkSpecial = (key, target) => {
+    let isTicked = this.state.settingsOptions.filter(i => i.name === "ignoreSpecial")[0].val;
+    return isTicked && (key === removeDiacritics(target) || (key === " " && /[^\w]/.test(target)));    
+  }
+  
   checkNewLine = () => {
     const yCursor = document.getElementsByClassName("cursor")[0].getBoundingClientRect().top;
     const yContainer = document.getElementById("container").getBoundingClientRect().top;
@@ -326,14 +294,10 @@ class App extends Component {
     if(Math.abs(rowOffset) < 1){
       this.setState({readyToRollAgain : true});
     }
-    // console.log(yCursor + " " + yContainer + " " + containerOffset + " = " + rowOffset);
     // check if y coordinate of cursor has changed of more than 50px (that means newline)
     if(this.state.readyToRollAgain && Math.abs(rowOffset) >= 50){
-      this.setState({readyToRollAgain: false});  
-      document.getElementById("target").style.top = String(
-        parseInt(document.getElementById("target").style.top, 10) - rowOffset) + "px";
-      document.getElementById("title").style.top = String(
-        parseInt(document.getElementById("title").style.top, 10) - rowOffset) + "px";      
+      this.setState({readyToRollAgain: false}); 
+      this.changeScrollCoord(this.state.styles.title - rowOffset, this.state.styles.target - rowOffset);    
     };
   }
 
@@ -352,8 +316,7 @@ class App extends Component {
       let match = e.key === target[cursorPos] || 
         this.checkCase(e.key, target[cursorPos]) ||
         this.checkSpecial(e.key, target[cursorPos]);
-      if(match){  // if char is correct, move cursor
-        document.getElementsByClassName("cursor")[0].removeAttribute("style");         
+      if(match){  // if char is correct, move cursor       
         this.setState({
           cursorPos : cursorPos + 1,
           correctyTypedChars : correctyTypedChars + 1
@@ -374,18 +337,18 @@ class App extends Component {
   }
 
   render() {
-    const {target, keyStrokes, cursorPos, tempTypingErr, totalTypingErr, 
-      timer, wpm, settingsOptions, fetching, title, firstSearch, searchTerm} = this.state;
+    const {target, keyStrokes, cursorPos, tempTypingErr, totalTypingErr, targetOnFocus, styles, showSettings,
+      timer, settingsOptions, fetching, title, firstSearch, searchTerm, correctyTypedChars} = this.state;
     return (
       <React.Fragment>
         <AppTitle />
         <TopBar pickNextArticle={this.pickNextArticle} onSearchSubmit={this.onSearchSubmit} firstSearch={firstSearch}
-          toggleSettings={this.changeSettingsStatus} onSearchChange={this.onSearchChange} searchTerm={searchTerm}/>
-        <Play />
-        <MainContainer target={target} title={title} tempTypingErr={tempTypingErr} 
-        cursorPos={cursorPos} fetching={fetching} toggleSettings={this.checkAsyncFocus}
-        settingsOptions={settingsOptions} onCheckboxChange={this.onCheckboxChange} />
-        <Accuracy keyStrokes={keyStrokes} totalTypingErr={totalTypingErr} timer={timer} wpm={wpm} />
+          toggleSettings={this.changeSettings} onSearchChange={this.onSearchChange} searchTerm={searchTerm} fetching={fetching}/>
+        <Play targetOnFocus={targetOnFocus} />
+        <MainContainer target={target} title={title} tempTypingErr={tempTypingErr} targetOnFocus={targetOnFocus}
+        cursorPos={cursorPos} fetching={fetching} styles={styles} toggleSettings={this.checkAsyncFocus}
+        settingsOptions={settingsOptions} showSettings={showSettings} onCheckboxChange={this.onCheckboxChange} />
+        <Accuracy keyStrokes={keyStrokes} totalTypingErr={totalTypingErr} timer={timer} correctyTypedChars={correctyTypedChars}/>
       </React.Fragment>
     );
   }
