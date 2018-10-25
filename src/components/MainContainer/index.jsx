@@ -13,7 +13,7 @@ const MainContainer = (props) => {
           <div id="title">{fetching ? " " : title}</div>
           <div id="target">
             {fetching ? "Fetching..." : target.split('').map((i, index) => 
-              <span id={"ch-" + index} className={"char "
+              <span id={"ch-" + index} key={"ch-" + index} className={"char "
                 + (index < cursorPos ? "correct " : "")
                 + (tempTypingErr.indexOf(index) !== -1 ? "error " : "")
                 + (index === cursorPos ? "cursor " : "")

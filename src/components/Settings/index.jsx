@@ -3,13 +3,13 @@ import './Settings.css';
 
 const Settings = (props) =>
   <div id="settings-panel" tabIndex="1" >{
-    props.settingsOptions.map(key => 
-      <div id={key.name}>
-        <label htmlFor={"label-" + key.name} key={"label-" + key.name} 
+    props.settingsOptions.map((key, index) => 
+      <div id={"option-" + index + "-" + key.name} key={"div-opt-" + index}>
+        <label htmlFor={"label-" + key.name} key={"label-opt-" + index} 
           className="option-checkbox" onBlur={props.toggleSettings}>
-          <input id={"input-" + key.name} type="checkbox" name={"input-" + key.name}
+          <input id={"input-" + key.name} type="checkbox" name={"input-" + key.name} key={"input-opt-" + index}
             defaultChecked={key.val} onChange={props.onCheckboxChange} />{key.label}
-          <span className="checkmark" />
+          <span className="checkmark" key={"span-opt-" + index} />
           <br />
         </label>
       </div>

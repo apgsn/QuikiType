@@ -19,6 +19,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
+      firstSearch: true,
       searchTerm: "Touch Typing",
       targetOnFocus: false,
       target: "",
@@ -98,11 +99,17 @@ class App extends Component {
     }, S);
   }
 
-  // when the user presses enter in search field, begin fetching articles
+  onSearchChange = (e) => {
+    if(this.state.firstSearch){
+      this.setState({ firstSearch : false });
+    }  
+    this.setState({ searchTerm : e.target.value });
+  }
+
   onSearchSubmit = (e) => {
     e.preventDefault();
     this.refreshContainer();
-    this.setState({searchTerm : document.getElementById("search-field").value}, this.fetchArticlesIds);
+    this.fetchArticlesIds();
   };
 
   // update options by creating a new settingsOptions list to be stored in state
@@ -159,7 +166,7 @@ class App extends Component {
       });
       return promise;
     }
-    wait().then((elm) => {
+    wait().then(elm => {
       if(!document.getElementById("settings-panel").contains(elm) && 
         elm !== document.getElementById("settings")){
         this.changeSettingsStatus();
@@ -368,12 +375,12 @@ class App extends Component {
 
   render() {
     const {target, keyStrokes, cursorPos, tempTypingErr, totalTypingErr, 
-      timer, wpm, settingsOptions, fetching, title} = this.state;
+      timer, wpm, settingsOptions, fetching, title, firstSearch, searchTerm} = this.state;
     return (
       <React.Fragment>
         <AppTitle />
-        <TopBar pickNextArticle={this.pickNextArticle} onSearchSubmit={this.onSearchSubmit}
-          toggleSettings={this.changeSettingsStatus}/>
+        <TopBar pickNextArticle={this.pickNextArticle} onSearchSubmit={this.onSearchSubmit} firstSearch={firstSearch}
+          toggleSettings={this.changeSettingsStatus} onSearchChange={this.onSearchChange} searchTerm={searchTerm}/>
         <Play />
         <MainContainer target={target} title={title} tempTypingErr={tempTypingErr} 
         cursorPos={cursorPos} fetching={fetching} toggleSettings={this.checkAsyncFocus}

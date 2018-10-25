@@ -1,14 +1,13 @@
 import React from 'react';
 import './TopBar.css';
-//import onSearchSubmit from './handleApi.js';
 
-const TopBar = ({onSearchSubmit, pickNextArticle, toggleSettings}) => 
+const TopBar = ({onSearchSubmit, pickNextArticle, toggleSettings, onSearchChange, firstSearch, searchTerm}) => 
   <div id="top-bar">
     <div id="magnifying-glass">
       <img src="imgs/icon-magnifying.png" alt="Search" id="icon-magnifying" className="icon" />
     </div>
     <form id="search-form" onSubmit={onSearchSubmit} tabIndex="1">
-      <input id="search-field" type="text"/>
+      <input id="search-field" type="text" onChange={onSearchChange} value={firstSearch ? "" : searchTerm} />
     </form>
     <div id="wiki-globe">
       <img src="imgs/wikilogo.png" alt="Loading..." id="loading-image" />
