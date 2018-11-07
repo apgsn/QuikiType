@@ -3,6 +3,8 @@
 
 A single page application created with the [React.js](https://github.com/facebook/react) library and the [Create-React-App](https://github.com/facebook/create-react-app) package.  
 
+Try [Quikitype!](https://quikitype.herokuapp.com/)  
+
 #### A problem to solve
 QuikiType attempts to solve a problem I encountered while trying to learn [touch typing](https://en.wikipedia.org/wiki/Touch_typing): the main websites that provide an interface to practice it either present dull, repetitive exercises or have a very limited selection of texts to type. QuikiType aims to offer a better alternative by dynamically fetching some introductory sentences of random Wikipedia articles on arguments selected by the user.  
 

@@ -39,6 +39,7 @@ class App extends Component {
       isCursorRendered: false,
       readyToRollAgain : true,
       timer : 0,
+      timerRunning: false,
       showSettings: false,
       styles: {
         title : 40,
@@ -82,14 +83,13 @@ class App extends Component {
  
   manageTimer = () => {
     const S = 1000; // 1 second timeframe (1000 ms)
-    this.setState({timer : 0});
     let start = Number(new Date());
     this.clock = setInterval(() => {
       let now = Number(new Date());
       // a calculation of delta is necessary to avoid accumulating extra ms
       let deltaErr = Math.abs((now - start) % S);
       deltaErr -= deltaErr > S / 2 ? S : 0;
-      // basically "start" gets move forward every second w/ delta
+      // basically "start" gets to move forward every second w/ delta
       start += deltaErr;
       // if the target is on focus, refresh time
       if(this.state.targetOnFocus){
@@ -173,9 +173,9 @@ class App extends Component {
     this.setState({fetching : !this.state.fetching});
   }
 
-  animateCSS = (id, animation, timer) => {
+  animateCSS = (id, animation, duration) => {
     document.getElementById(id).style.animation = animation;
-    setTimeout(() => document.getElementById(id).removeAttribute("style"), timer);   
+    setTimeout(() => document.getElementById(id).removeAttribute("style"), duration);   
   }
 
   handleFetchingErrors = (err) => {
@@ -303,11 +303,11 @@ class App extends Component {
 
   onKeyPress = (e) => {
     const {keyStrokes, target, cursorPos, tempTypingErr,
-      totalTypingErr,correctyTypedChars, fetching, timer} = this.state;
+      totalTypingErr,correctyTypedChars, fetching, timerRunning} = this.state;
     // prevent accidentally registering keys while fetching
     if(fetching) return;
     // start timer
-    if(!timer) this.manageTimer();
+    if(!timerRunning) this.setState({timerRunning : true}, this.manageTimer);
     // prevent quick-search in Firefox
     if(e.key === "'" || e.key === "/" || e.key === " ") e.preventDefault(); 
     // if it's a single char (as opposed to special keys), check:
